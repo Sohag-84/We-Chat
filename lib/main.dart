@@ -1,5 +1,4 @@
 import 'package:chat_app/views/auth/login_screen.dart';
-import 'package:chat_app/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
 ///global object for accessing device screen size
