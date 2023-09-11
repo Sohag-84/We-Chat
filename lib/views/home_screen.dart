@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/widgets/chat_user_card.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +42,25 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Icon(Icons.add_comment_rounded),
         ),
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: 2),
-        physics: BouncingScrollPhysics(),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ChatUserCard();
+      body: StreamBuilder(
+        stream: APIs.firestore.collection("users").snapshots(),
+        builder: (context,snapshot){
+          if(snapshot.hasData){
+            final data = snapshot.data!.docs;
+            for(var i in data){
+              log("Data: ${i.data()}");
+            }
+            return Text("data");
+          }else{
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: 2),
+              physics: BouncingScrollPhysics(),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return ChatUserCard();
+              },
+            );
+          }
         },
       ),
     );
