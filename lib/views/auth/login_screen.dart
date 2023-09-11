@@ -25,8 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery.sizeOf(context);
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
