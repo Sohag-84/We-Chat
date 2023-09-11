@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/helper/dialogs.dart';
 import 'package:chat_app/main.dart';
 import 'package:chat_app/views/home_screen.dart';
@@ -63,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log("\n_signInWithGoogle: $e");
       Dialogs.showSnackBar(
@@ -76,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   ///sign out function
   _signOut() async {
-    await FirebaseAuth.instance.signOut();
+    await APIs.auth.signOut();
     await GoogleSignIn().signOut();
   }
 
