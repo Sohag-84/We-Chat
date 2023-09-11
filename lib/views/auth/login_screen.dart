@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:developer';
+
 import 'package:chat_app/main.dart';
 import 'package:chat_app/views/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,6 +25,41 @@ class _LoginScreenState extends State<LoginScreen> {
         _isAnimated = true;
       });
     });
+  }
+
+  _handleGoogleBtnClick() {
+    _signInWithGoogle().then((user) {
+      log("\nUser: ${user.user}");
+      log("\nAdditional Info: ${user.additionalUserInfo}");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    });
+  }
+
+  Future<UserCredential> _signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+
+  ///sign out function
+  _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 
   @override
@@ -49,12 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
             duration: Duration(seconds: 2),
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                  ),
-                );
+                _handleGoogleBtnClick();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 223, 255, 187),
