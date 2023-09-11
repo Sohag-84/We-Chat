@@ -25,8 +25,8 @@ class ChatUserCard extends StatelessWidget {
           leading: CircleAvatar(
             child: Icon(CupertinoIcons.person),
           ),
-          title: Text("Raiyan"),
-          subtitle: Text("Assalamo alaikom", maxLines: 1),
+          title: Text(userChat.name),
+          subtitle: Text(userChat.about, maxLines: 1),
           trailing: Text(
             "12:56 PM",
             style: TextStyle(color: Colors.black54),
