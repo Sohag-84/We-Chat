@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:chat_app/api/apis.dart';
+import 'package:chat_app/models/chat_user_model.dart';
 import 'package:chat_app/widgets/chat_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<ChatUser> list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,22 +46,28 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: StreamBuilder(
         stream: APIs.firestore.collection("users").snapshots(),
-        builder: (context,snapshot){
-          if(snapshot.hasData){
-            final data = snapshot.data!.docs;
-            for(var i in data){
-              log("Data: ${i.data()}");
-            }
-            return Text("data");
-          }else{
-            return ListView.builder(
-              padding: EdgeInsets.symmetric(vertical: 2),
-              physics: BouncingScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return ChatUserCard();
-              },
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
             );
+          } else {
+            final data = snapshot.data?.docs;
+            list = data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+            return list.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 2),
+                    physics: BouncingScrollPhysics(),
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return ChatUserCard(
+                        userChat: list[index],
+                      );
+                    },
+                  )
+                : Center(
+                    child: Text("No Chat Found"),
+                  );
           }
         },
       ),
