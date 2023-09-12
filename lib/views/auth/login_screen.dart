@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'dart:developer';
 import 'dart:io';
@@ -33,16 +33,26 @@ class _LoginScreenState extends State<LoginScreen> {
   _handleGoogleBtnClick() {
     ///for showing progress bar
     Dialogs.showProgressBar(context: context);
-    _signInWithGoogle().then((user) {
+    _signInWithGoogle().then((user) async {
       ///for hiding progress bar
       Navigator.pop(context);
       if (user != null) {
         log("\nUser: ${user.user}");
         log("\nAdditional Info: ${user.additionalUserInfo}");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+
+        if ((await APIs.userExists())) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else {
+          await APIs.createUser().then((value) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          });
+        }
       }
     });
   }

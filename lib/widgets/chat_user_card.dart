@@ -2,7 +2,6 @@
 
 import 'package:chat_app/main.dart';
 import 'package:chat_app/models/chat_user_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatUserCard extends StatelessWidget {
@@ -23,7 +22,7 @@ class ChatUserCard extends StatelessWidget {
         onTap: () {},
         child: ListTile(
           leading: CircleAvatar(
-            child: Icon(CupertinoIcons.person),
+            child: Image.network(userChat.image),
           ),
           title: Text(userChat.name),
           subtitle: Text(userChat.about, maxLines: 1),

@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 2),
                     physics: BouncingScrollPhysics(),
-                    itemCount: 10,
+                    itemCount: list.length,
                     itemBuilder: (context, index) {
                       return ChatUserCard(
                         userChat: list[index],
