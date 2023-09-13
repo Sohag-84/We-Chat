@@ -153,7 +153,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        log("inside validator");
+                        APIs.updateUserInfo().then((value) {
+                          Dialogs.showSnackBar(
+                              context: context,
+                              message: "Profile update successfully");
+                        });
                       }
                     },
                     label: Text(
