@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:developer';
 
 import 'package:chat_app/api/apis.dart';
 import 'package:chat_app/models/chat_user_model.dart';
